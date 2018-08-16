@@ -135,6 +135,4 @@ class Login:
 
     def getSession(self):
         return self.session
-    #username = input('微博用户名：')
-    #password = input('微博密码：')
 

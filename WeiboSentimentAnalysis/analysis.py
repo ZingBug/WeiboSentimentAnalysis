@@ -38,6 +38,8 @@ class SemanticAnalysis:
             self.summary.append(s.summary(3))
         print(len(self.sentimentslist))
         plt.hist(self.sentimentslist, bins=np.arange(0, 1, 0.01))
+        plt.savefig("./sentiment.png")
+        plt.figure('情感分析图')
         plt.show()
 
     def getWordCloud(self):
@@ -65,9 +67,8 @@ class SemanticAnalysis:
         wc.generate(cloud_text)
         #wc.recolor(color_func=image_colors)
         wc.to_file("./wordCloud.png")
-        image=plt.imread("./wordCloud.png")
-
-
+        image = plt.imread("./wordCloud.png")
+        plt.figure("词云图")
         plt.imshow(image)
         plt.show()
 
