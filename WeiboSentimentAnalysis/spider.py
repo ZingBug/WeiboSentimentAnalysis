@@ -9,14 +9,15 @@ import random
 from datetime import datetime
 from datetime import timedelta
 import openpyxl
+import os
 
-
+##爬虫程序
 class CollectData():
-    def __init__(self,keyword,startTime,path,session,interval='50',flag=True,begin_url_per="http://s.weibo.com/weibo/"):
+    def __init__(self,keyword,startTime,excelPath,session,interval='50',flag=True,begin_url_per="http://s.weibo.com/weibo/"):
         self.begin_url_per=begin_url_per #设置固定地址部分
         self.startTime=startTime
         self.session=session
-        self.path = path
+        self.excelPath = excelPath
         self.keyWord=keyword
         self.setKeyWord(keyword)
         self.setStartTimescope(startTime)
@@ -28,7 +29,17 @@ class CollectData():
 
 
     def setExcel(self):
-        self.wb=openpyxl.load_workbook(self.path)
+        #先检查是否存在excel文件
+        if (not os.access(self.excelPath,os.F_OK)) or (not os.access(self.excelPath,os.W_OK)):
+            #不存在表格或者表格不可写，需要重新建表格
+            self.wb=openpyxl.Workbook()
+        elif not os.access(self.excelPath,os.W_OK):
+            #表格不可写，重新建立表格
+            os.remove(self.excelPath)
+            self.wb=openpyxl.Workbook()
+        else:
+            self.wb=openpyxl.load_workbook(self.excelPath)
+
         #title=self.startTime #sheet名字
         title=self.startTime+"-"+self.keyWord
         sheets=self.wb.sheetnames
@@ -39,6 +50,8 @@ class CollectData():
 
         self.sheet=self.wb.create_sheet(title)
         self.sheet.append(['序号','昵称','关键词','发表时间','微博地址','微博内容'])
+
+        self.wb.save(self.excelPath)
 
     ##设置关键字
     ##关键字需解码后编码为utf-8
@@ -141,7 +154,7 @@ class CollectData():
                                         self.num=self.sheet.max_row#获取当前数目
                                         self.sheet.append([self.num,name,self.keyWord,self.startTime,addr,txt])
                                         ##保存表
-                                        self.wb.save(self.path)
+                                        self.wb.save(self.excelPath)
                         break
 
                 lines=None

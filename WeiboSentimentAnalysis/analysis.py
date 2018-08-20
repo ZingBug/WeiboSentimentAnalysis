@@ -4,6 +4,7 @@ import openpyxl
 import jieba
 import numpy as np
 from wordcloud import WordCloud,STOPWORDS,ImageColorGenerator
+import os
 
 
 class SemanticAnalysis:
@@ -16,9 +17,16 @@ class SemanticAnalysis:
         self.summary=[]
         self.getMessage()
 
-
-
+    ##从excel表格中读取消息
     def getMessage(self):
+        #先判断路径文件是否存在
+        if not os.access(self.excelPath,os.F_OK):
+            print('表格不存在，请确认表格地址')
+            exit(0)
+        if not os.access(self.excelPath,os.R_OK):
+            print('表格不可读')
+            exit(0)
+
         self.wb=openpyxl.load_workbook(self.excelPath)
         title=self.startTime+"-"+self.keyWord
         #title=self.startTime
