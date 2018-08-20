@@ -14,8 +14,9 @@ if __name__=="__main__":
         #登录成功，开始爬虫数据
         session=login.getSession()#得到登录信息的Session
         interval = '40'
-        excelPath = 'data/weibo.xlsx'
-        cd=CollectData(keyword,startTime,excelPath,session,interval)
+        excelPath = 'data//weibo.xlsx'
+        excelDir='data'
+        cd=CollectData(keyword,startTime,excelPath,excelDir,session,interval)
         cd.start()
         #爬虫数据结束，开始语义分析
         sa=SemanticAnalysis(startTime,keyword,excelPath)

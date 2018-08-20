@@ -13,11 +13,12 @@ import os
 
 ##爬虫程序
 class CollectData():
-    def __init__(self,keyword,startTime,excelPath,session,interval='50',flag=True,begin_url_per="http://s.weibo.com/weibo/"):
+    def __init__(self,keyword,startTime,excelPath,excelDir,session,interval='50',flag=True,begin_url_per="http://s.weibo.com/weibo/"):
         self.begin_url_per=begin_url_per #设置固定地址部分
         self.startTime=startTime
         self.session=session
         self.excelPath = excelPath
+        self.excelDir=excelDir
         self.keyWord=keyword
         self.setKeyWord(keyword)
         self.setStartTimescope(startTime)
@@ -29,8 +30,11 @@ class CollectData():
 
 
     def setExcel(self):
-        #先检查是否存在excel文件
-        if (not os.access(self.excelPath,os.F_OK)) or (not os.access(self.excelPath,os.W_OK)):
+        #先检查是否存在data文件夹
+        if not os.path.exists(self.excelDir):
+            os.makedirs(self.excelDir)
+        #再检查是否存在excel文件
+        if not os.access(self.excelPath,os.F_OK):
             #不存在表格或者表格不可写，需要重新建表格
             self.wb=openpyxl.Workbook()
         elif not os.access(self.excelPath,os.W_OK):
@@ -57,7 +61,7 @@ class CollectData():
     ##关键字需解码后编码为utf-8
     def setKeyWord(self,keyword):
         self.keyword=keyword.encode("utf-8")
-        print('twice encode:',self.getKeyWord())
+        #print('twice encode:',self.getKeyWord())
 
     ##关键词需要进行两次urlencode
     def getKeyWord(self):
